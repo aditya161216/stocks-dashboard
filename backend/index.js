@@ -15,7 +15,7 @@ const API_KEY = process.env.API_KEY
 // GET request to retrieve stock data based on a specific ticker symbol
 app.get('/api/stock/:symbol', async (req, res) => {
     tickerSymbol = req.params.symbol
-    const url = `https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=${tickerSymbol}&interval=5min&apikey=${API_KEY}&datatype=csv`
+    const url = `https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=${tickerSymbol}&interval=5min&apikey=${API_KEY}&datatype=csv&outputsize=compact`
 
     try {
         const response = await axios.get(url)
