@@ -21,5 +21,4 @@ Choose 'All' as the zoom option, and you should now be able to see your chart.
 Enjoy!
 
 
-# NOTE: The Alpha Vantage API only allows for 25 requests a day per API key, so if your request is unable to
-# be completed, it is due to this daily limit being exceeded 
+# NOTE: The Alpha Vantage API only allows for 25 requests a day per API key, so if your request is unable to be completed, it is due to this daily limit being exceeded 

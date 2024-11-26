@@ -8,7 +8,9 @@ const API_BASE_URL = 'http://localhost:3001/'; // backend base URL
 export const fetchStockDatabyTicker = async (tickerSymbol) => {
 
     try {
-        const data = await axios.get(`${API_BASE_URL}api/stock/${tickerSymbol}`)
+        const data = await axios.get(`${API_BASE_URL}api/stock/${tickerSymbol}`, {
+            withCredentials: true,
+        })
         return data
     }
 
@@ -22,7 +24,9 @@ export const fetchStockDatabyTicker = async (tickerSymbol) => {
 export const fetchTickerRecommendations = async (tickerSymbol) => {
 
     try {
-        const data = await axios.get(`${API_BASE_URL}api/recommendation/${tickerSymbol}`)
+        const data = await axios.get(`${API_BASE_URL}api/recommendation/${tickerSymbol}`, {
+            withCredentials: true,
+        })
         return data
     }
 
@@ -31,3 +35,21 @@ export const fetchTickerRecommendations = async (tickerSymbol) => {
     }
 
 }
+
+// function to logout
+export const handleLogout = () => {
+    fetch('http://localhost:3001/auth/logout', {
+        method: 'GET',
+        credentials: 'include',
+    })
+        .then((response) => {
+            if (response.ok) {
+                window.location.href = '/login';
+            } else {
+                console.error('Failed to log out');
+            }
+        })
+        .catch((error) => {
+            console.error('Error logging out:', error);
+        });
+};
