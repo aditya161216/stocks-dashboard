@@ -27,6 +27,21 @@ app.get('/api/stock/:symbol', async (req, res) => {
 
 })
 
+// GET request to retrieve recommended ticker symbols based on entered input
+app.get('/api/recommendation/:symbol', async (req, res) => {
+    tickerSymbol = req.params.symbol
+    const url = `https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords=${tickerSymbol}&apikey=${API_KEY}`
+
+    try {
+        const response = await axios.get(url)
+        res.json(response.data);
+    }
+    catch (error) {
+        res.status(500).json({ error: 'Failed to fetch ticker recommendations' });
+    }
+
+})
+
 
 // app is running on port PORT
 app.listen(PORT, () => {

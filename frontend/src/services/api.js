@@ -17,3 +17,17 @@ export const fetchStockDatabyTicker = async (tickerSymbol) => {
     }
 
 }
+
+// function to fetch ticker recommendations based on a ticker symbol
+export const fetchTickerRecommendations = async (tickerSymbol) => {
+
+    try {
+        const data = await axios.get(`${API_BASE_URL}api/recommendation/${tickerSymbol}`)
+        return data
+    }
+
+    catch (error) {
+        throw error
+    }
+
+}
