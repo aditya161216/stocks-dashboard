@@ -6,14 +6,19 @@ First, clone the repository: `git clone [https cloning link]`
 
 ## Run the backend
 Open a terminal window.  
+
 Navigate into the project directory:  
 `cd stocks-dashboard`  
+
 Then run the backend:  
 `node backend/index.js`
 
 ## Run the frontend
-Open another terminal window. Navigate into the project directory, then navigate into the frontend directory:  
+Open another terminal window. 
+
+Navigate into the project directory, then navigate into the frontend directory:  
 `cd stocks-dashboard/frontend`  
+
 Then run the frontend:  
 `npm start`
 
