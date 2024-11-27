@@ -1,5 +1,8 @@
 .App {
   text-align: center;
+  height: 100vh;
+  width: 100vw;
+  background-color: #f4f4f9;
 }
 
 .App-logo {
@@ -26,6 +29,178 @@
 
 .App-link {
   color: #61dafb;
+}
+
+.header {
+  position: relative;
+  /* Ensures proper positioning of child elements */
+  display: flex;
+  justify-content: space-between;
+  /* Spreads items across the header */
+  align-items: center;
+  /* Centers items vertically */
+  padding: 10px 20px;
+  /* Optional: Adds padding */
+}
+
+@keyframes sweep {
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.fade-in {
+  animation: fadeIn 2s forwards;
+  /* Fade in once animation starts */
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+.login {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh; /* Full viewport height */
+  background-color: #f4f4f9; /* Light background color */
+}
+
+/* Sweeping Animated Gradient Background */
+@keyframes gradient-sweep {
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.login-container {
+  display: flex;
+  flex-direction: column;
+  /* Stack items vertically */
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  /* Full viewport height */
+  width: 100vw;
+  /* Full viewport width */
+  text-align: center;
+  background: linear-gradient(270deg, #bebebea7, #9c9c9c);
+  background-size: 400% 400%;
+  /* Smooth sweeping animation */
+  animation: gradient-sweep 5s infinite ease-in-out;
+  /* Sweeping effect */
+  padding: 20px;
+  /* Add padding around the content */
+  box-sizing: border-box;
+  /* Ensures padding doesn't affect layout dimensions */
+}
+
+.login-title {
+  font-size: 2.4rem;
+  font-weight: bold;
+  color: #000000;
+  /* White text for readability */
+  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.7);
+  /* Subtle shadow for contrast */
+  margin-bottom: 10px;
+}
+
+.login-description {
+  font-size: 1.2rem;
+  color: #000000;
+  /* White text */
+  /* text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.7); */
+  /* Subtle shadow for contrast */
+  margin-bottom: 20px;
+  line-height: 1.5;
+}
+
+.login-button {
+  padding: 10px 20px;
+  font-size: 1rem;
+  color: #ffffff;
+  background-color: #007bff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s, opacity 1s ease-in;
+  opacity: 0;
+  animation: fadeIn 1s forwards;
+  /* Fade-in effect with 1-second duration */
+  animation-delay: 0.1s;
+  /* Button appears sooner (after 2 seconds delay) */
+}
+
+.login-button:hover {
+  background-color: #0056b3;
+}
+
+.login-button:focus {
+  outline: none;
+}
+
+/* Fade-In Animation for the Button */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+.getStocks {
+  padding: 5px 7px;
+  background-color: #9d9d9da7;
+  color: black;
+  border: none;
+  border-radius: 35px;
+  cursor: pointer;
+
+}
+
+.getStocks:hover {
+  background-color: #c4c3c3a7;
+
+}
+
+.signout {
+  position: absolute;
+  top: 10px;
+  right: 20px;
+  padding: 10px 15px;
+  background-color: #9d9d9da7;
+  color: black;
+  border: none;
+  border-radius:35px;
+  cursor: pointer;
+}
+.signout:hover {
+  background-color: #c4c3c3a7;
+  
 }
 
 .dropdown {

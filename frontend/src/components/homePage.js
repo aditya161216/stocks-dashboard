@@ -136,6 +136,9 @@ const HomePage = () => {
 
     return (
         <div className="App">
+            <div class="header">
+                <button class="signout" onClick={handleLogout}>Sign Out</button>
+            </div>
             <h1>Stock Data Visualizer</h1>
             <div>
                 <input
@@ -144,13 +147,10 @@ const HomePage = () => {
                     value={ticker}
                     onChange={(e) => setTicker(e.target.value)}
                     onFocus={() => setShowDropdown(true)} />
-                <button onClick={getStockData}>Fetch Stock Data</button>
-                <div>
-                    <button class="signout" onClick={handleLogout}>Sign Out</button>
-                </div>
-                {/* {showDropdown && Array.isArray(tickerRecs) && tickerRecs.length > 0 && (
+                <button class="getStocks" onClick={getStockData}>Fetch Stock Data</button>
+                {showDropdown && Array.isArray(tickerRecs) && tickerRecs.length > 0 && (
           <div className="dropdown">
-            {tickerRecs.map((rec, index) => (
+            {/* {tickerRecs.map((rec, index) => (
               <div
                 key={index}
                 className="dropdown-item"
@@ -158,9 +158,9 @@ const HomePage = () => {
               >
                 {rec["1. symbol"]} - {rec["2. name"]}
               </div>
-            ))}
+            ))} */}
           </div>
-        )} */}
+        )}
                 {/* <button onClick={getTickerRecs}>Fetch Ticker Recs</button> */}
             </div>
             <div>
@@ -175,15 +175,7 @@ const HomePage = () => {
                     </div>
                 )}
             </div>
-            {/* <div>
-        {tickerRecs && (
-          <div>
-            <h3>Stock Recommendations for {ticker.toUpperCase()}:</h3>
-            <pre>{JSON.stringify(tickerRecs, null, 2)}</pre> 
-          </div>
-        )}
-      </div> */}
-
+            
         </div>
     );
 }

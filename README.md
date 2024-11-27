@@ -1,11 +1,14 @@
 # Stocks Dashboard by Aditya Vikrant
 A project that helps users visualize real-time stock data and create custom watchlists
 
+## Clone the respository
+First, clone the repository: `git clone [https cloning link]`
+
 ## Run the backend
-Open a terminal window. Navigate into the project directory, then navigate into the backend directory:
-`cd stocks-dashboard/backend`
+Open a terminal window. 
+Navigate into the project directory: `cd stocks-dashboard`
 Then run the backend:
-`node index.js`
+`node backend/index.js`
 
 ## Run the frontend
 Open another terminal window. Navigate into the project directory, then navigate into the frontend directory:
