@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import '../Login.css';
 
 const Login = () => {
     const [typingComplete, setTypingComplete] = useState(false);
