@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import '../Login.css';
+import { toast, ToastContainer } from "react-toastify"; // Toast notifications
+import "react-toastify/dist/ReactToastify.css"; // Toastify CSS
 
 const Login = () => {
     const [typingComplete, setTypingComplete] = useState(false);
@@ -7,22 +9,35 @@ const Login = () => {
     const [displayedText, setDisplayedText] = useState("");
 
     useEffect(() => {
+
+        // this will display the text as if it is being typed
         let index = 0;
         const interval = setInterval(() => {
             if (index < welcomeText.length) {
-                setDisplayedText(welcomeText.slice(0, index + 1)); // Safely update displayed text
+                setDisplayedText(welcomeText.slice(0, index + 1)); 
                 index++;
             } else {
                 clearInterval(interval);
                 setTypingComplete(true);
             }
-        }, 40); // Adjust typing speed here (100ms per character)
+        }, 50); // adjust typing speed 
         return () => clearInterval(interval);
     }, [welcomeText]);
 
     const handleLogin = () => {
-        // Redirect to backend's login endpoint
+        // redirect to backend's login endpoint
         window.location.href = "http://localhost:3001/auth/login";
+
+        // // delay the redirection to allow the toast to display
+        // toast.success("Successfully logged in!", {
+        //     position: "top-center",
+        //     autoClose: 5000,
+        // });
+
+        // setTimeout(() => {
+        //     window.location.href = "http://localhost:3001/auth/login";
+        // }, 3000); // Redirect after 3 seconds
+        
     };
 
     return (
@@ -38,6 +53,7 @@ const Login = () => {
                     </button>
                 )}
             </div>
+            <footer className="credits">By Aditya Vikrant</footer>
         </div>
     );
 };

@@ -4,6 +4,8 @@ import React, { useState, useEffect } from "react"
 // import Highcharts from 'highcharts'
 import HighchartsReact from 'highcharts-react-official'
 import * as Highcharts from "highcharts/highstock";
+import { toast, ToastContainer } from "react-toastify"; // Toast notifications
+import "react-toastify/dist/ReactToastify.css"; // Toastify CSS
 
 
 // homepage component
@@ -21,6 +23,10 @@ const HomePage = () => {
     // stores the state of the dropdown recommendation
     const [showDropdown, setShowDropdown] = useState(false);
 
+    // determines whether to display the chart or not
+    const [showChart, setShowChart] = useState(false);
+
+
     // log stockData and tickerRecs whenever they change
     useEffect(() => {
         if (stockData) {
@@ -31,6 +37,7 @@ const HomePage = () => {
         }
     }, [stockData, tickerRecs]);
 
+    // update ticker recommendations as the user is typing in a ticker symbol
     // useEffect(() => {
     //   if (ticker) {
     //     getTickerRecs();
@@ -42,45 +49,90 @@ const HomePage = () => {
 
     // parses the returned stock data to display
     const parseStockData = (data) => {
-        console.log(data)
-        // split CSV into rows
-        const rows = data.split("\r\n").slice(1);
 
-        // map rows into Highcharts candlestick format
-        const parsedData = rows.map((row) => {
-            const [timestamp, open, high, low, close] = row.split(",");
-            if (!timestamp || !open || !high || !low || !close) return null; // skip invalid rows
-            return [
-                new Date(timestamp).getTime(), // convert timestamp to milliseconds
-                parseFloat(open),
-                parseFloat(high),
-                parseFloat(low),
-                parseFloat(close),
-            ];
-        });
+        if (data?.Information === "Thank you for using Alpha Vantage! Our standard API rate limit is 25 requests per day. Please subscribe to any of the premium plans at https://www.alphavantage.co/premium/ to instantly remove all daily rate limits.") {
+            
+            return "You have reached the API Request Limit for today.";
+        }
 
-        // filter out null rows
-        return parsedData.filter((item) => item !== null);
+        else {
+            // split CSV into rows
+            const rows = data.split("\r\n").slice(1);
+
+            // map rows into Highcharts candlestick format
+            const parsedData = rows.map((row) => {
+                const [timestamp, open, high, low, close] = row.split(",");
+                if (!timestamp || !open || !high || !low || !close) return null; // skip invalid rows
+                return [
+                    new Date(timestamp).getTime(), // convert timestamp to milliseconds
+                    parseFloat(open),
+                    parseFloat(high),
+                    parseFloat(low),
+                    parseFloat(close),
+                ];
+            });
+
+            // filter out null rows
+            return parsedData.filter((item) => item !== null);
+
+        }
+        
     }
 
     // function that gets the stock data based on the ticker symbol entered by the user
     const getStockData = async () => {
+        if (!ticker) {
+            toast.error("Enter a valid ticker symbol.", {
+                position: "top-center",
+                autoClose: 5000,
+            });
+            return
+        }
 
         try {
-            const rawData = await fetchStockDatabyTicker(ticker)
-            const extractedData = rawData.data
+            var rawData;
+            if (ticker) {
+                rawData = await fetchStockDatabyTicker(ticker)
+                
+                const LIMIT_REACHED = (rawData.data.Information === "Thank you for using Alpha Vantage! Our standard API rate limit is 25 requests per day. Please subscribe to any of the premium plans at https://www.alphavantage.co/premium/ to instantly remove all daily rate limits.")
+                
+                // Check if rate limit message is returned
+                if (LIMIT_REACHED) {
+                    toast.error("You have reached the request limit for today.", {
+                        position: "top-center",
+                        autoClose: 5000,
+                    });
+                    return
+                }
 
-            try {
-                const parsedData = parseStockData(extractedData)
-                setStockData(parsedData)
+                else {
+                    const extractedData = rawData.data
+
+                    try {
+                        const parsedData = parseStockData(extractedData)
+                        setShowChart(true)
+                        setStockData(parsedData)
+
+                    }
+
+                    catch (error) {
+                        toast.error(error.message, {
+                            position: "top-center",
+                            autoClose: 5000,
+                        });
+                        return
+                    }
+
+                }
 
             }
-
-            catch (error) {
-                console.log("HELLO")
-                throw error
-
+            else {
+                setStockData([])
+                return "Please enter a valid ticker"
             }
+            
+
+            
 
         }
         catch (error) {
@@ -119,6 +171,9 @@ const HomePage = () => {
 
     // options for the chart displaying data
     const options = {
+        chart: {
+            backgroundColor: '#e1e1e4', // Set the background color (replace with your desired color)
+        },
         rangeSelector: {
             selected: 1,
         },
@@ -136,18 +191,19 @@ const HomePage = () => {
 
     return (
         <div className="App">
+            <ToastContainer />
             <div class="header">
                 <button class="signout" onClick={handleLogout}>Sign Out</button>
             </div>
-            <h1>Stock Data Visualizer</h1>
+            <p className="input-prompt">Enter a stock ticker symbol (e.g., AAPL, TSLA, AMZN) to view its market performance.</p>
             <div>
                 <input
                     type="text"
-                    placeholder="Enter ticker symbol (e.g., IBM)"
+                    placeholder="Search..."
                     value={ticker}
                     onChange={(e) => setTicker(e.target.value)}
                     onFocus={() => setShowDropdown(true)} />
-                <button class="getStocks" onClick={getStockData}>Fetch Stock Data</button>
+                <button class="getStocks" onClick={getStockData}>Fetch Data</button>
                 {showDropdown && Array.isArray(tickerRecs) && tickerRecs.length > 0 && (
           <div className="dropdown">
             {/* {tickerRecs.map((rec, index) => (
@@ -164,7 +220,7 @@ const HomePage = () => {
                 {/* <button onClick={getTickerRecs}>Fetch Ticker Recs</button> */}
             </div>
             <div>
-                {stockData && (
+                {stockData && showChart && (
                     <div>
                         <HighchartsReact
                             highcharts={Highcharts}
