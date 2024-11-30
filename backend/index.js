@@ -7,6 +7,7 @@ const session = require('express-session');
 // const { google } = require('google-auth-library');
 const cookieParser = require('cookie-parser');
 const { google } = require('googleapis');
+const Watchlist = require("./models/Watchlist");
 
 const PORT = 3001;
 const API_KEY = process.env.API_KEY
@@ -35,6 +36,13 @@ app.use(
     })
 );
 
+
+// connect to mongo instance
+mongoose
+    .connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+    .then(() => console.log("MongoDB connected"))
+    .catch((err) => console.error("MongoDB connection error:", err));
+
 // Google OAuth2 Configuration
 const oauth2Client = new google.auth.OAuth2(
     process.env.GOOGLE_CLIENT_ID,
@@ -44,6 +52,9 @@ const oauth2Client = new google.auth.OAuth2(
 
 // middleware to check authentication
 const isAuthenticated = (req, res, next) => {
+    // res.send(req.session)
+    // console.log(req)
+    console.log("Session in isAuthenticated:", req);
     if (!req.session.tokens) {
         return res.status(401).json({ error: 'Unauthorized. Please log in.' });
     }
@@ -60,6 +71,7 @@ app.get('/auth/login', (req, res) => {
         access_type: 'offline',
         scope: scopes,
     });
+    console.log("GOODMORNING HELLO", authUrl)
     res.redirect(authUrl);
 });
 
@@ -74,6 +86,16 @@ app.get('/auth/callback', async (req, res) => {
 
         // Store tokens in session
         req.session.tokens = tokens;
+
+        req.session.save((err) => {
+            if (err) {
+                console.error('Error saving session:', err);
+            } else {
+                console.log('Session saved successfully');
+            }
+        });
+
+        console.log("HERE ARE THE TOKENS: ", req.session.tokens)
 
         // Redirect to a dashboard or home page
         if (req.session.tokens) {
@@ -96,6 +118,16 @@ app.get('/auth/check', (req, res) => {
     }
 });
 
+app.get('/get-session', (req, res) => {
+    if (req.session) {
+        res.send('Session data: '
+            + JSON.stringify(req.session));
+    } else {
+        res.send('No session data found');
+    }
+
+})
+
 
 // logout route
 app.get('/auth/logout', (req, res) => {
@@ -110,6 +142,7 @@ app.get('/auth/logout', (req, res) => {
         return res.status(200).json({ message: 'Logged out successfully' });
     });
 });
+
 
 
 // GET request to retrieve stock data based on a specific ticker symbol
@@ -131,16 +164,85 @@ app.get('/api/stock/:symbol', isAuthenticated, async (req, res) => {
 app.get('/api/recommendation/:symbol', isAuthenticated, async (req, res) => {
     tickerSymbol = req.params.symbol
     const url = `https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords=${tickerSymbol}&apikey=${API_KEY}`
+    console.log("HERE IS THE USERID", req.session.tokens.id_token)
 
     try {
         const response = await axios.get(url)
+        
         res.json(response.data);
     }
     catch (error) {
         res.status(500).json({ error: 'Failed to fetch ticker recommendations' });
     }
 
+    
+
 })
+
+// MONGODB STUFF
+
+// get a user's watchlists
+app.get('/api/watchlists', isAuthenticated, async (req, res) => {
+    try {
+        const userId = req.session.tokens.id_token
+        const watchlists = await Watchlist.find({ userId });
+        res.status(200).json(watchlists);
+    }
+    catch (err) {
+        console.log(err)
+        res.status(500).json({error: "Failed to retrieve watchlists"})
+    }
+})
+
+// create a new watchlist for this user
+app.post('/api/watchlists', isAuthenticated, async (req, res) => {
+    try {
+        const userId = req.session.tokens.id_token; 
+        const { name, stocks } = req.body;
+
+        const newWatchlist = new Watchlist({ userId, name, stocks });
+        const savedWatchlist = await newWatchlist.save();
+
+        res.status(201).json(savedWatchlist);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: "Failed to create watchlist" });
+    }
+})
+
+// update an existing watchlist
+app.put('/api/watchlists/:id', isAuthenticated, async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { name, stocks } = req.body;
+
+        const updatedWatchlist = await Watchlist.findByIdAndUpdate(
+            id,
+            { name, stocks },
+            { new: true }
+        );
+
+        res.status(200).json(updatedWatchlist);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: "Failed to update watchlist" });
+    }
+});
+
+// delete an existing watchlist
+app.delete('/api/watchlists/:id', isAuthenticated, async (req, res) => {
+    try {
+        const { id } = req.params;
+        await Watchlist.findByIdAndDelete(id);
+
+        res.status(200).json({ message: "Watchlist deleted successfully" });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: "Failed to delete watchlist" });
+    }
+});
+
+
 
 
 // app is running on port PORT

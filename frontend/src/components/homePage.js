@@ -6,6 +6,7 @@ import HighchartsReact from 'highcharts-react-official'
 import * as Highcharts from "highcharts/highstock";
 import { toast, ToastContainer } from "react-toastify"; // Toast notifications
 import "react-toastify/dist/ReactToastify.css"; // Toastify CSS
+import Watchlist from "../components/watchlist"
 
 
 // homepage component
@@ -231,6 +232,7 @@ const HomePage = () => {
                     </div>
                 )}
             </div>
+            <Watchlist></Watchlist>
             
         </div>
     );

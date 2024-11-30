@@ -70,3 +70,56 @@ export const handleLogout = () => {
             console.error('Error logging out:', error);
         });
 };
+
+
+// fetch all watchlists for the user
+export const fetchWatchlists = async () => {
+    try {
+        const response = await axios.get(`${API_BASE_URL}api/watchlists`, {
+            withCredentials: true,
+        });
+        return response.data;
+    } catch (error) {
+        console.error("Error fetching watchlists:", error);
+        throw error;
+    }
+};
+
+// create a new watchlist
+export const createWatchlist = async (watchlist) => {
+    try {
+        const response = await axios.post(`${API_BASE_URL}api/watchlists`, watchlist, {
+            withCredentials: true,
+        });
+        return response.data;
+    } catch (error) {
+        console.error("Error creating watchlist:", error);
+        throw error;
+    }
+};
+
+// update a watchlist
+export const updateWatchlist = async (id, watchlist) => {
+    try {
+        const response = await axios.put(`${API_BASE_URL}api/watchlists/${id}`, watchlist, {
+            withCredentials: true,
+        });
+        return response.data;
+    } catch (error) {
+        console.error("Error updating watchlist:", error);
+        throw error;
+    }
+};
+
+// delete a watchlist
+export const deleteWatchlist = async (id) => {
+    try {
+        const response = await axios.delete(`${API_BASE_URL}api/watchlists/${id}`, {
+            withCredentials: true,
+        });
+        return response.data;
+    } catch (error) {
+        console.error("Error deleting watchlist:", error);
+        throw error;
+    }
+};
