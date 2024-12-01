@@ -60,4 +60,4 @@ Make sure that you enter the stock ticker symbols, not the actual name of the st
 Enjoy!
 
 
-## Note: The Alpha Vantage API only allows for 25 requests a day per API key, so if your request is unable to be completed, it is due to this daily limit being exceeded.
+## Note: The Alpha Vantage API (which is used to fetch stock data) only allows for 25 requests a day per API key, so if your request is unable to be completed, it is due to this daily limit being exceeded.
