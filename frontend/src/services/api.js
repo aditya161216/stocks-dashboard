@@ -78,6 +78,7 @@ export const fetchWatchlists = async () => {
         const response = await axios.get(`${API_BASE_URL}api/watchlists`, {
             withCredentials: true,
         });
+        console.log("I am in api.js", response)
         return response.data;
     } catch (error) {
         console.error("Error fetching watchlists:", error);

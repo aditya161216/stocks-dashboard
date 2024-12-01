@@ -8,6 +8,7 @@ const session = require('express-session');
 const cookieParser = require('cookie-parser');
 const { google } = require('googleapis');
 const Watchlist = require("./models/Watchlist");
+const jwt = require('jsonwebtoken');
 
 const PORT = 3001;
 const API_KEY = process.env.API_KEY
@@ -184,9 +185,17 @@ app.get('/api/recommendation/:symbol', isAuthenticated, async (req, res) => {
 // get a user's watchlists
 app.get('/api/watchlists', isAuthenticated, async (req, res) => {
     try {
-        const userId = req.session.tokens.id_token
+        const idToken = req.session.tokens.id_token    // this is the id token given by google for this user (does not remain constant however)
+
+        // extract the 'sub' field from the id token, as this remains constant 
+        const decodedToken = jwt.decode(idToken);
+        const userId = decodedToken.sub;
+        
+        console.log("IN backend: ", userId)
         const watchlists = await Watchlist.find({ userId });
         res.status(200).json(watchlists);
+        // res.send(userId)
+
     }
     catch (err) {
         console.log(err)
@@ -194,12 +203,17 @@ app.get('/api/watchlists', isAuthenticated, async (req, res) => {
     }
 })
 
-// create a new watchlist for this user
+// create a watchlist for this user
 app.post('/api/watchlists', isAuthenticated, async (req, res) => {
     try {
-        const userId = req.session.tokens.id_token; 
+        const idToken = req.session.tokens.id_token;
+
+        const decodedToken = jwt.decode(idToken);
+        const userId = decodedToken.sub; 
+
         const { name, stocks } = req.body;
 
+        // save the watchlist
         const newWatchlist = new Watchlist({ userId, name, stocks });
         const savedWatchlist = await newWatchlist.save();
 
@@ -208,14 +222,25 @@ app.post('/api/watchlists', isAuthenticated, async (req, res) => {
         console.error(err);
         res.status(500).json({ error: "Failed to create watchlist" });
     }
-})
+});
 
-// update an existing watchlist
+// update an existing watchlist for this user
 app.put('/api/watchlists/:id', isAuthenticated, async (req, res) => {
     try {
+        const idToken = req.session.tokens.id_token;
+
+        const decodedToken = jwt.decode(idToken);
+        const userId = decodedToken.sub; 
+
         const { id } = req.params;
         const { name, stocks } = req.body;
 
+        const watchlist = await Watchlist.findOne({ _id: id, userId });
+        if (!watchlist) {
+            return res.status(404).json({ error: "Watchlist not found or unauthorized" });
+        }
+
+        // update the watchlist
         const updatedWatchlist = await Watchlist.findByIdAndUpdate(
             id,
             { name, stocks },
@@ -229,10 +254,22 @@ app.put('/api/watchlists/:id', isAuthenticated, async (req, res) => {
     }
 });
 
-// delete an existing watchlist
+// delete an existing watchlist for this user
 app.delete('/api/watchlists/:id', isAuthenticated, async (req, res) => {
     try {
+        const idToken = req.session.tokens.id_token;
+
+        const decodedToken = jwt.decode(idToken);
+        const userId = decodedToken.sub; 
+
         const { id } = req.params;
+
+        const watchlist = await Watchlist.findOne({ _id: id, userId });
+        if (!watchlist) {
+            return res.status(404).json({ error: "Watchlist not found or unauthorized" });
+        }
+
+        // delete the watchlist
         await Watchlist.findByIdAndDelete(id);
 
         res.status(200).json({ message: "Watchlist deleted successfully" });
@@ -241,8 +278,6 @@ app.delete('/api/watchlists/:id', isAuthenticated, async (req, res) => {
         res.status(500).json({ error: "Failed to delete watchlist" });
     }
 });
-
-
 
 
 // app is running on port PORT

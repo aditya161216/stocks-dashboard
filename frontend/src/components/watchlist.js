@@ -17,6 +17,7 @@ const Watchlist = () => {
         const fetchData = async () => {
             try {
                 const data = await fetchWatchlists();
+                console.log(data)
                 setWatchlists(data);
             } catch (error) {
                 console.error("Failed to fetch watchlists:", error);
