@@ -4,6 +4,17 @@ A project that helps users visualize real-time stock data and create custom watc
 ## Clone the respository
 First, clone the repository: `git clone [https cloning link]`
 
+## .env file
+Open a terminal window
+
+Navigate into the project directory: `cd stocks-dashboard`
+
+Create a file for environment variables: `touch .env`
+
+Contact the repository owner for access to environment variables at vikrant.a@northeastern.edu.
+
+Paste these variables into your newly created file.
+
 ## Run the backend
 Open a terminal window.  
 
