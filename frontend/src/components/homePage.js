@@ -97,7 +97,7 @@ const HomePage = () => {
                 
                 const LIMIT_REACHED = (rawData.data.Information === "Thank you for using Alpha Vantage! Our standard API rate limit is 25 requests per day. Please subscribe to any of the premium plans at https://www.alphavantage.co/premium/ to instantly remove all daily rate limits.")
                 
-                // Check if rate limit message is returned
+                // check if rate limit message is returned
                 if (LIMIT_REACHED) {
                     toast.error("You have reached the request limit for today.", {
                         position: "top-center",
@@ -173,10 +173,17 @@ const HomePage = () => {
     // options for the chart displaying data
     const options = {
         chart: {
-            backgroundColor: '#e1e1e4', // Set the background color (replace with your desired color)
+            backgroundColor: '#e1e1e4',
         },
         rangeSelector: {
-            selected: 1,
+            // selected: 5,     // defaults to the 'All' option
+            buttons: [
+                {
+                    type: 'all', // Show the entire range
+                    text: 'All',
+                },
+            ],
+            selected: 0, // Default to the first (and only) button
         },
         title: {
             text: `Stock History for ${ticker.toUpperCase()}`,
@@ -203,7 +210,12 @@ const HomePage = () => {
                     placeholder="Search..."
                     value={ticker}
                     onChange={(e) => setTicker(e.target.value)}
-                    onFocus={() => setShowDropdown(true)} />
+                    onFocus={() => setShowDropdown(true)}
+                    onKeyDown={(e) => {
+                        if (e.key === "Enter") {
+                            getStockData(); // get data when user presses enter
+                        }
+                    }} />
                 <button class="getStocks" onClick={getStockData}>Fetch Data</button>
                 {showDropdown && Array.isArray(tickerRecs) && tickerRecs.length > 0 && (
           <div className="dropdown">

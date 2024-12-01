@@ -6,6 +6,8 @@ import {
     deleteWatchlist,
 } from "../services/api"; 
 import "../Watchlist.css"
+import { toast, ToastContainer } from "react-toastify"; // Toast notifications
+import "react-toastify/dist/ReactToastify.css"; // Toastify CSS
 
 const Watchlist = () => {
     const [watchlists, setWatchlists] = useState([]);
@@ -110,12 +112,34 @@ const Watchlist = () => {
                     placeholder="Watchlist Name"
                     value={newWatchlistName}
                     onChange={(e) => setNewWatchlistName(e.target.value)}
+                    onKeyDown={(e) => {
+                        if (e.key === "Enter" && newWatchlistName && newWatchlistStocks) {
+                            handleCreateWatchlist(); // get data when user presses enter
+                        }
+                        else if (e.key === "Enter" && (!newWatchlistName || !newWatchlistStocks)) {
+                            toast.error("Please enter a watchlist name and stocks for this watchlist.", {
+                                position: "top-center",
+                                autoClose: 5000,
+                            });
+                        }
+                    }}
                 />
                 <input
                     type="text"
                     placeholder="Stocks (comma-separated)"
                     value={newWatchlistStocks}
                     onChange={(e) => setNewWatchlistStocks(e.target.value)}
+                    onKeyDown={(e) => {
+                        if (e.key === "Enter" && newWatchlistName && newWatchlistStocks) {
+                            handleCreateWatchlist(); // get data when user presses enter
+                        }
+                        else if (e.key === "Enter" && (!newWatchlistName || !newWatchlistStocks)) {
+                            toast.error("Please enter a watchlist name and stocks for this watchlist.", {
+                                position: "top-center",
+                                autoClose: 5000,
+                            });
+                        }
+                    }}
                 />
                 <button onClick={handleCreateWatchlist}>Create Watchlist</button>
             </div>
