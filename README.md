@@ -5,7 +5,7 @@ A project that helps users visualize real-time stock data and create custom watc
 First, clone the repository: `git clone [https cloning link]`
 
 ## .env file
-Open a terminal window
+Open a terminal window.
 
 Navigate into the project directory: `cd stocks-dashboard`
 
