@@ -38,7 +38,7 @@ Then run the frontend: `npm start`
 ## Visualize stock data
 In the input box, enter the ticker symbol for whichever stock data you are trying to view. 
 For example, if you would like to view stock data for Apple, enter 'aapl' or 'AAPL' and click 'Fetch Data'.
-Choose 'All' as the zoom option, and you should now be able to see your chart.
+You should now be able to see your chart.
 
 ## View, Delete, and Update watchlists
 In the bottom half of the screen, you will be able to view any watchlist you have previously created.
