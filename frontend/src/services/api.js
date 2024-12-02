@@ -3,7 +3,8 @@ import { toast } from "react-toastify";
 
 import axios from 'axios';
 
-const API_BASE_URL = 'http://localhost:3001/'; // backend base URL
+// const API_BASE_URL = 'http://localhost:3001/'; // backend base URL
+const API_BASE_URL = 'https://stocks-dashboard-442921.ue.r.appspot.com/'
 
 // function to fetch stock data by a specific ticker symbol
 export const fetchStockDatabyTicker = async (tickerSymbol) => {
@@ -51,7 +52,7 @@ export const fetchTickerRecommendations = async (tickerSymbol) => {
 
 // function to logout
 export const handleLogout = () => {
-    fetch('http://localhost:3001/auth/logout', {
+    fetch('https://stocks-dashboard-442921.ue.r.appspot.com/auth/logout', {
         method: 'GET',
         credentials: 'include',
     })

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import '../Login.css';
-import { toast, ToastContainer } from "react-toastify"; // Toast notifications
-import "react-toastify/dist/ReactToastify.css"; // Toastify CSS
+import { toast, ToastContainer } from "react-toastify"; // toast notifications
+import "react-toastify/dist/ReactToastify.css"; // toastify CSS
 
 const Login = () => {
     const [typingComplete, setTypingComplete] = useState(false);
@@ -26,7 +26,8 @@ const Login = () => {
 
     const handleLogin = () => {
         // redirect to backend's login endpoint
-        window.location.href = "http://localhost:3001/auth/login";
+        // window.location.href = "http://localhost:3001/auth/login";
+        window.location.href = 'https://stocks-dashboard-442921.ue.r.appspot.com/auth/login'
 
         // // delay the redirection to allow the toast to display
         // toast.success("Successfully logged in!", {

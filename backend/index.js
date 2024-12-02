@@ -7,7 +7,8 @@ const session = require('express-session');
 // const { google } = require('google-auth-library');
 const cookieParser = require('cookie-parser');
 const { google } = require('googleapis');
-const Watchlist = require("./models/Watchlist");
+const path = require('path');
+const Watchlist = require(path.join(__dirname, './models/watchlist'));
 const jwt = require('jsonwebtoken');
 
 const PORT = 3001;

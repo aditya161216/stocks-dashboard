@@ -6,7 +6,8 @@ const ProtectedRoute = ({ children }) => {
 
     useEffect(() => {
         // check if the user is authenticated
-        fetch("http://localhost:3001/auth/check", {
+        // 'https://stocks-dashboard-442921.ue.r.appspot.com/'
+        fetch("https://stocks-dashboard-442921.ue.r.appspot.com/auth/check", {
             credentials: "include", // include cookies
         })
             .then((response) => {
