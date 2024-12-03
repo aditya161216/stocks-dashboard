@@ -31,7 +31,7 @@ app.use(
         resave: false,
         saveUninitialized: false,
         cookie: {
-            secure: true, // Set to true if using HTTPS
+            secure: true, // IMPORTANT - set to true if backend is deployed/uses HTTPS
             httpOnly: true, // Prevent access to cookies via JavaScript
             sameSite: 'lax', // CSRF protection
         },
@@ -62,6 +62,10 @@ const isAuthenticated = (req, res, next) => {
     }
     next();
 };
+
+app.get('/', (req, res) => {
+    res.send("Good morning")
+})
 
 // route to initiate login
 app.get('/auth/login', (req, res) => {
