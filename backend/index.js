@@ -31,7 +31,7 @@ app.use(
         resave: false,
         saveUninitialized: false,
         cookie: {
-            secure: false, // Set to true if using HTTPS
+            secure: true, // Set to true if using HTTPS
             httpOnly: true, // Prevent access to cookies via JavaScript
             sameSite: 'lax', // CSRF protection
         },
